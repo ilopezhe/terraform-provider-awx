@@ -190,6 +190,7 @@ func (o *jobTemplateAssociateDisassociateInstanceGroup) Delete(ctx context.Conte
 		"method":   http.MethodPost,
 		"endpoint": endpoint,
 	})
+
 	_ = json.NewEncoder(&buf).Encode(bodyRequest)
 	if r, err = o.client.NewRequest(ctx, http.MethodPost, endpoint, &buf); err != nil {
 		response.Diagnostics.AddError(
@@ -200,6 +201,10 @@ func (o *jobTemplateAssociateDisassociateInstanceGroup) Delete(ctx context.Conte
 	}
 
 	if _, err = o.client.Do(ctx, r); err != nil {
+		if o.client.IsResourceNotFound(err) {
+			// Remove the resource from the state to signal that it needs to be recreated
+			return
+		}
 		response.Diagnostics.AddError(
 			fmt.Sprintf("Unable to disassociate for JobTemplate on %s", o.endpoint),
 			err.Error(),

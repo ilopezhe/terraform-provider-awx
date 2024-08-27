@@ -91,6 +91,11 @@ func (o *teamObjectRolesDataSource) Read(ctx context.Context, req datasource.Rea
 	// Try and actually fetch the data for Credential
 	var data map[string]any
 	if data, err = o.client.Do(ctx, r); err != nil {
+		if o.client.IsResourceNotFound(err) {
+			// Remove the resource from the state to signal that it needs to be recreated
+			resp.State.RemoveResource(ctx)
+			return
+		}
 		resp.Diagnostics.AddError(
 			fmt.Sprintf("Unable to fetch the request for team object roles on %s", endpoint),
 			err.Error(),

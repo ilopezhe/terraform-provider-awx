@@ -47,5 +47,5 @@ func (c *clientWithTokenAuth) IsResourceNotFound(err error) bool {
 		return false
 	}
 	// Check if the error message contains "status code: 404"
-	return strings.Contains(err.Error(), "status code: 404")
+	return strings.Contains(err.Error(), "status code: 404") || strings.Contains(err.Error(), "status code: 400")
 }
