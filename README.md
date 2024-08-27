@@ -26,10 +26,7 @@ Older version of AWX report incorrect API spec. So manual changes may be require
 
 ```shell
 export AWX_VERSION=24.6.1
-mkdir -p resources/api/$AWX_VERSION/config resource
-```
-
-s/api/$AWX_VERSION/gen-data
+mkdir -p resources/api/$AWX_VERSION/config resources/api/$AWX_VERSION/gen-data
 cat <<EOF > resources/api/$AWX_VERSION/config/default.json
 {
 "api_version": "$AWX_VERSION"
@@ -39,16 +36,15 @@ make generate-config VERSION=$AWX_VERSION
 make download-api VERSION=$AWX_VERSION
 make generate-config VERSION=$AWX_VERSION
 
-````
+```
 
 Check the previous version of the APIs inside the `config/types` folder to see about customization.
 
-Build the version of the current API
--------------------------------------
+## Build the version of the current API
 
 ```shell
 make generate
-````
+```
 
 If you want to build an API for the `24.6.1` version just run
 
