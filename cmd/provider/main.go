@@ -5,12 +5,12 @@ import (
 	"flag"
 	"log"
 
-	"github.com/ilijamt/terraform-provider-awx/internal/awx"
-	"github.com/ilijamt/terraform-provider-awx/version"
+	"github.com/ilopezhe/terraform-provider-awx/internal/awx"
+	"github.com/ilopezhe/terraform-provider-awx/version"
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 
-	"github.com/ilijamt/terraform-provider-awx/internal/provider"
+	"github.com/ilopezhe/terraform-provider-awx/internal/provider"
 )
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
 		context.Background(),
 		provider.NewFuncProvider(version.Version, nil, awx.Resources(), awx.DataSources()),
 		providerserver.ServeOpts{
-			Address: "registry.terraform.io/ilijamt/awx",
+			Address: "registry.terraform.io/ilopezhe/awx",
 			Debug:   debug,
 		},
 	); err != nil {

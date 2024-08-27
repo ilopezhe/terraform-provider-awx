@@ -22,7 +22,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -126,7 +126,7 @@ func (o *instanceGroupResource) Schema(ctx context.Context, req resource.SchemaR
 				Required:    false,
 				Optional:    true,
 				Computed:    true,
-				Default:     stringdefault.StaticString(`{"apiVersion":"v1","kind":"Pod","metadata":{"namespace":"default"},"spec":{"automountServiceAccountToken":false,"containers":[{"args":["ansible-runner","worker","--private-data-dir=/runner"],"image":"quay.io/ansible/awx-ee:latest","name":"worker","resources":{"requests":{"cpu":"250m","memory":"100Mi"}}}],"serviceAccountName":"default"}}`),
+				Default:     stringdefault.StaticString(`{"apiVersion":"v1","kind":"Pod","metadata":{"namespace":"ansible-awx"},"spec":{"automountServiceAccountToken":false,"containers":[{"args":["ansible-runner","worker","--private-data-dir=/runner"],"image":"quay.io/ansible/awx-ee:latest","name":"worker","resources":{"requests":{"cpu":"250m","memory":"100Mi"}}}],"serviceAccountName":"default"}}`),
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -331,6 +331,11 @@ func (o *instanceGroupResource) Read(ctx context.Context, request resource.ReadR
 	// Get refreshed values for InstanceGroup from AWX
 	var data map[string]any
 	if data, err = o.client.Do(ctx, r); err != nil {
+		if o.client.IsResourceNotFound(err) {
+			// Remove the resource from the state to signal that it needs to be recreated
+			response.State.RemoveResource(ctx)
+			return
+		}
 		response.Diagnostics.AddError(
 			fmt.Sprintf("Unable to read resource for InstanceGroup on %s", endpoint),
 			err.Error(),

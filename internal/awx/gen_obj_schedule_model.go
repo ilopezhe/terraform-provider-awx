@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/ilijamt/terraform-provider-awx/internal/helpers"
+	"github.com/ilopezhe/terraform-provider-awx/internal/helpers"
 )
 
 // scheduleTerraformModel maps the schema for Schedule when using Data Source

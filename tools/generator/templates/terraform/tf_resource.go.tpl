@@ -19,8 +19,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
-    "github.com/ilijamt/terraform-provider-awx/internal/hooks"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
+    "github.com/ilopezhe/terraform-provider-awx/internal/hooks"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -294,6 +294,11 @@ func (o *{{ .Name | lowerCamelCase }}Resource) Read(ctx context.Context, request
 	// Get refreshed values for {{ .Name }} from AWX
     var data map[string]any
     if data, err = o.client.Do(ctx, r); err != nil {
+        if o.client.IsResourceNotFound(err) {
+            // Remove the resource from the state to signal that it needs to be recreated
+            response.State.RemoveResource(ctx)
+            return
+        }
         response.Diagnostics.AddError(
             fmt.Sprintf("Unable to read resource for {{ .Name }} on %s", endpoint),
             err.Error(),

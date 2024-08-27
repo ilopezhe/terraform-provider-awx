@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/ilijamt/terraform-provider-awx/internal/helpers"
+	"github.com/ilopezhe/terraform-provider-awx/internal/helpers"
 )
 
 // inventorySourceTerraformModel maps the schema for InventorySource when using Data Source

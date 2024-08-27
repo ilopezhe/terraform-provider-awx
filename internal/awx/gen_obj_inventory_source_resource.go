@@ -21,8 +21,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
-	"github.com/ilijamt/terraform-provider-awx/internal/hooks"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
+	"github.com/ilopezhe/terraform-provider-awx/internal/hooks"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -211,7 +211,7 @@ func (o *inventorySourceResource) Schema(ctx context.Context, req resource.Schem
 					stringplanmodifier.UseStateForUnknown(),
 				},
 				Validators: []validator.String{
-					stringvalidator.OneOf([]string{"file", "constructed", "scm", "ec2", "gce", "azure_rm", "vmware", "satellite6", "openstack", "rhv", "controller", "insights", "terraform"}...),
+					stringvalidator.OneOf([]string{"file", "constructed", "scm", "ec2", "gce", "azure_rm", "vmware", "satellite6", "openstack", "rhv", "controller", "insights", "terraform", "openshift_virtualization"}...),
 				},
 			},
 			"source_path": schema.StringAttribute{
@@ -415,6 +415,11 @@ func (o *inventorySourceResource) Read(ctx context.Context, request resource.Rea
 	// Get refreshed values for InventorySource from AWX
 	var data map[string]any
 	if data, err = o.client.Do(ctx, r); err != nil {
+		if o.client.IsResourceNotFound(err) {
+			// Remove the resource from the state to signal that it needs to be recreated
+			response.State.RemoveResource(ctx)
+			return
+		}
 		response.Diagnostics.AddError(
 			fmt.Sprintf("Unable to read resource for InventorySource on %s", endpoint),
 			err.Error(),

@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ilijamt/terraform-provider-awx/tools/generator"
-	"github.com/ilijamt/terraform-provider-awx/tools/generator/internal"
+	"github.com/ilopezhe/terraform-provider-awx/tools/generator"
+	"github.com/ilopezhe/terraform-provider-awx/tools/generator/internal"
 )
 
 // templateCmd represents the base command when called without any subcommands

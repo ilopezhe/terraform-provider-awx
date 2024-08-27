@@ -1,6 +1,11 @@
-default: generate build
+HOSTNAME ?= github.com
+NAMESPACE ?= ilopezhe
+NAME ?= awx
+BINARY ?= ./build/terraform-provider-${NAME}
+VERSION ?= 24.6.1
+OS_ARCH ?= darwin_arm64 # Can be overridden to linux_amd64, darwin_amd64, etc.
 
-VERSION=24.2.0
+default: generate build
 
 .PHONY: generate-config
 generate-config:
@@ -9,8 +14,7 @@ generate-config:
 .PHONY: download-api
 download-api:
 	mkdir -p resources/api/$(VERSION)/config resources/api/$(VERSION)/gen-data
-	go run ./tools/generator/cmd/generator/main.go fetch-api-resources resources/api/$(VERSION) \
-		--host $(TOWER_HOST) --password $(TOWER_PASSWORD) --username $(TOWER_USERNAME) --insecure-skip-verify
+	go run ./tools/generator/cmd/generator/main.go fetch-api-resources resources/api/$(VERSION) --host http://localhost:8080 --password changeme --username test
 
 .PHONY: generate-configs
 generate-configs: resources/api/*
@@ -42,7 +46,7 @@ build-cover:
 
 .PHONY: build
 build:
-	go build -trimpath -o ./build/terraform-provider-awx -ldflags "-s -w" ./cmd/provider
+	go build -trimpath -o ${BINARY} -ldflags "-s -w" ./cmd/provider
 
 .PHONY: test
 test:
@@ -51,4 +55,33 @@ test:
 
 .PHONY: testacc
 testacc:
-	TF_ACC=1 go test -count=1 -parallel=4 -timeout 10m -v ./...
+	TF_ACC=1 go test -count=1 -parallel=4 -timeout 10m -tags=full -v ./...
+
+.PHONY: testfull
+testfull:
+	TF_ACC=1 go test -count=1 -parallel=4 -timeout 10m -v ./...; \
+	rm -rf ./examples/full/.terraform* ./examples/full/terraform.tfstate* && \
+	rm -rf ./examples/full/.terraform* ./examples/full/terraform.tfstate*
+
+.PHONY: install
+install: build
+	go install ./cmd/provider/
+	mkdir -p ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
+	cp ${BINARY} ~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
+
+.PHONY: dev
+dev:
+	cd ./tools/mage && go run mage.go -v reCreate && cd ../..
+
+.PHONY: dev-cleanup
+dev-cleanup:
+	cd ./tools/mage && go run mage.go -v delete && cd ../..
+
+.PHONY: port-forward
+port-forward:
+	kubectl port-forward service/awx-service -n ansible-awx 8080:80 > /dev/null 2>&1 &
+
+.PHONY: no-port-forward
+no-port-forward:
+	pkill -f "kubectl port-forward"
+

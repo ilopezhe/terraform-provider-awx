@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ilijamt/terraform-provider-awx/internal/models"
+	"github.com/ilopezhe/terraform-provider-awx/internal/models"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
 	"github.com/mitchellh/mapstructure"
 )
 

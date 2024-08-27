@@ -9,8 +9,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
-	"github.com/ilijamt/terraform-provider-awx/internal/provider"
-	"github.com/ilijamt/terraform-provider-awx/version"
+	"github.com/ilopezhe/terraform-provider-awx/internal/provider"
+	"github.com/ilopezhe/terraform-provider-awx/version"
 )
 
 // testAccProtoV6ProviderFactoriesUnique is used to ensure that the provider instance used for

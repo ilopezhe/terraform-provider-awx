@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ilijamt/terraform-provider-awx/internal/hooks"
+	"github.com/ilopezhe/terraform-provider-awx/internal/hooks"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )

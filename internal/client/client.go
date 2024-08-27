@@ -16,6 +16,7 @@ var (
 type Client interface {
 	NewRequest(ctx context.Context, method string, endpoint string, body io.Reader) (*http.Request, error)
 	Do(ctx context.Context, req *http.Request) (data map[string]any, err error)
+	IsResourceNotFound(err error) bool
 }
 
 func defaultClient(client *http.Client, insecureSkipVerify bool) *http.Client {

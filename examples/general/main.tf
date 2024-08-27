@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     awx = {
-      source = "registry.terraform.io/ilijamt/awx"
+      source = "registry.terraform.io/ilopezhe/awx"
     }
   }
 }
@@ -62,8 +62,8 @@ data "awx_user" "admin" {
   username = "admin"
 }
 
-resource "awx_user" "ilijamt" {
-  username     = "ilijamt"
+resource "awx_user" "ilopezhe" {
+  username     = "ilopezhe"
   password     = "test"
   is_superuser = true
 }

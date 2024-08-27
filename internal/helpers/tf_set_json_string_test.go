@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/ilijamt/terraform-provider-awx/internal/helpers"
+	"github.com/ilopezhe/terraform-provider-awx/internal/helpers"
 )
 
 func TestAttrValueSetJsonString(t *testing.T) {

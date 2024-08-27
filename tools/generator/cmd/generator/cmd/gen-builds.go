@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ilijamt/terraform-provider-awx/tools/generator/internal"
+	"github.com/ilopezhe/terraform-provider-awx/tools/generator/internal"
 )
 
 var genBuilds = &cobra.Command{

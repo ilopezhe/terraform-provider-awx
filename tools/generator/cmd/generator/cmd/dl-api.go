@@ -13,8 +13,8 @@ import (
 	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/cobra"
 
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
-	"github.com/ilijamt/terraform-provider-awx/tools/generator/internal"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
+	"github.com/ilopezhe/terraform-provider-awx/tools/generator/internal"
 )
 
 var fetchApiResourcesCmd = &cobra.Command{

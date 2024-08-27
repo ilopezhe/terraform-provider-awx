@@ -18,7 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -114,7 +114,7 @@ func (o *notificationTemplateResource) Schema(ctx context.Context, req resource.
 				Computed:      false,
 				PlanModifiers: []planmodifier.String{},
 				Validators: []validator.String{
-					stringvalidator.OneOf([]string{"email", "grafana", "irc", "mattermost", "pagerduty", "rocketchat", "slack", "twilio", "webhook"}...),
+					stringvalidator.OneOf([]string{"awssns", "email", "grafana", "irc", "mattermost", "pagerduty", "rocketchat", "slack", "twilio", "webhook"}...),
 				},
 			},
 			"organization": schema.Int64Attribute{
@@ -228,6 +228,11 @@ func (o *notificationTemplateResource) Read(ctx context.Context, request resourc
 	// Get refreshed values for NotificationTemplate from AWX
 	var data map[string]any
 	if data, err = o.client.Do(ctx, r); err != nil {
+		if o.client.IsResourceNotFound(err) {
+			// Remove the resource from the state to signal that it needs to be recreated
+			response.State.RemoveResource(ctx)
+			return
+		}
 		response.Diagnostics.AddError(
 			fmt.Sprintf("Unable to read resource for NotificationTemplate on %s", endpoint),
 			err.Error(),

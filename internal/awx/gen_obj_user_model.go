@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/ilijamt/terraform-provider-awx/internal/helpers"
+	"github.com/ilopezhe/terraform-provider-awx/internal/helpers"
 )
 
 // userTerraformModel maps the schema for User when using Data Source

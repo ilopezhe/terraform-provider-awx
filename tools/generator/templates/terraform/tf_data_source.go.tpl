@@ -6,9 +6,9 @@ import (
 	"net/http"
 	p "path"
 
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
-    "github.com/ilijamt/terraform-provider-awx/internal/hooks"
-	"github.com/ilijamt/terraform-provider-awx/internal/helpers"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
+    "github.com/ilopezhe/terraform-provider-awx/internal/hooks"
+	"github.com/ilopezhe/terraform-provider-awx/internal/helpers"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"

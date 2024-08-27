@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/ilijamt/envwrap"
-	"github.com/ilijamt/terraform-provider-awx/internal/helpers"
+	"github.com/ilopezhe/terraform-provider-awx/internal/helpers"
 	"github.com/stretchr/testify/assert"
 )
 

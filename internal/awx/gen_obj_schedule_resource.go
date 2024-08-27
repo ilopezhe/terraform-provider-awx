@@ -19,7 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -412,6 +412,11 @@ func (o *scheduleResource) Read(ctx context.Context, request resource.ReadReques
 	// Get refreshed values for Schedule from AWX
 	var data map[string]any
 	if data, err = o.client.Do(ctx, r); err != nil {
+		if o.client.IsResourceNotFound(err) {
+			// Remove the resource from the state to signal that it needs to be recreated
+			response.State.RemoveResource(ctx)
+			return
+		}
 		response.Diagnostics.AddError(
 			fmt.Sprintf("Unable to read resource for Schedule on %s", endpoint),
 			err.Error(),

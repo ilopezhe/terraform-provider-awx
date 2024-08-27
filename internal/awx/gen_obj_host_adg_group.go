@@ -18,8 +18,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
-	"github.com/ilijamt/terraform-provider-awx/internal/models"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
+	"github.com/ilopezhe/terraform-provider-awx/internal/models"
 )
 
 var (

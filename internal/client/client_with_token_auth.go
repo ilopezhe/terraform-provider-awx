@@ -40,3 +40,12 @@ func (c *clientWithTokenAuth) NewRequest(ctx context.Context, method string, end
 func (c *clientWithTokenAuth) Do(ctx context.Context, req *http.Request) (data map[string]any, err error) {
 	return doRequest(c.client, ctx, req)
 }
+
+// IsResourceNotFound checks if the given error indicates a 404 Not Found response.
+func (c *clientWithTokenAuth) IsResourceNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	// Check if the error message contains "status code: 404"
+	return strings.Contains(err.Error(), "status code: 404")
+}

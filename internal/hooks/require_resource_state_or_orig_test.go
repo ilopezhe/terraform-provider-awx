@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ilijamt/terraform-provider-awx/internal/hooks"
+	"github.com/ilopezhe/terraform-provider-awx/internal/hooks"
 	"github.com/stretchr/testify/require"
 )
 

@@ -71,3 +71,4 @@ fabric.properties
 /resources/run.sh
 /.terraformrc
 /node_modules/
+get_helm.sh

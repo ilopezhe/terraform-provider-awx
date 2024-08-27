@@ -20,7 +20,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -266,7 +266,7 @@ func (o *settingsMiscSystemResource) Schema(ctx context.Context, req resource.Sc
 				Required:    false,
 				Optional:    true,
 				Computed:    true,
-				Default:     stringdefault.StaticString(`https://localhost:8043`),
+				Default:     stringdefault.StaticString(`http://localhost:8080`),
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -453,6 +453,11 @@ func (o *settingsMiscSystemResource) Read(ctx context.Context, request resource.
 	// Get refreshed values for SettingsMiscSystem from AWX
 	var data map[string]any
 	if data, err = o.client.Do(ctx, r); err != nil {
+		if o.client.IsResourceNotFound(err) {
+			// Remove the resource from the state to signal that it needs to be recreated
+			response.State.RemoveResource(ctx)
+			return
+		}
 		response.Diagnostics.AddError(
 			fmt.Sprintf("Unable to read resource for SettingsMiscSystem on %s", endpoint),
 			err.Error(),

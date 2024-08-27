@@ -7,9 +7,9 @@ import (
 	"net/url"
 	p "path"
 
-	c "github.com/ilijamt/terraform-provider-awx/internal/client"
-	"github.com/ilijamt/terraform-provider-awx/internal/helpers"
-	"github.com/ilijamt/terraform-provider-awx/internal/hooks"
+	c "github.com/ilopezhe/terraform-provider-awx/internal/client"
+	"github.com/ilopezhe/terraform-provider-awx/internal/helpers"
+	"github.com/ilopezhe/terraform-provider-awx/internal/hooks"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -152,7 +152,7 @@ func (o *inventorySourceDataSource) Schema(ctx context.Context, req datasource.S
 				Sensitive:   false,
 				Computed:    true,
 				Validators: []validator.String{
-					stringvalidator.OneOf([]string{"file", "constructed", "scm", "ec2", "gce", "azure_rm", "vmware", "satellite6", "openstack", "rhv", "controller", "insights", "terraform"}...),
+					stringvalidator.OneOf([]string{"file", "constructed", "scm", "ec2", "gce", "azure_rm", "vmware", "satellite6", "openstack", "rhv", "controller", "insights", "terraform", "openshift_virtualization"}...),
 				},
 			},
 			"source_path": schema.StringAttribute{
