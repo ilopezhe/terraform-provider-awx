@@ -63,9 +63,14 @@ func (o *{{ .Name | lowerCamelCase }}TerraformModel) BodyRequest() (req {{ .Name
 
 {{ range $key := .PropertyGetKeys }}
 {{- with (index $.PropertyGetData $key) }}
-{{- if not (and (eq (lowerCase $.Name) "tokens") (eq (lowerCase $key) "token")) }}
 func (o *{{ $.Name | lowerCamelCase }}TerraformModel) set{{ $key | setPropertyCase }}(data any) (d diag.Diagnostics, err error) {
-{{- if eq (awx2go_value .) "types.Int64Value" }}
+{{- if and (eq (lowerCase $.Name) "tokens") (eq (lowerCase $key) "token") }}
+    // For the token field in the Tokens model, only set if it's not already set
+    if o.{{ property_case $key $.Config }}.IsNull() || o.{{ property_case $key $.Config }}.IsUnknown() {
+        return helpers.AttrValueSetString(&o.{{ property_case $key $.Config }}, data, {{ default .trim false }})
+    }
+    return // Return without changing the value if it's already set
+{{- else if eq (awx2go_value .) "types.Int64Value" }}
     return helpers.AttrValueSetInt64(&o.{{ property_case $key $.Config }}, data)
 {{- else if eq (awx2go_value .) "types.Float64Value" }}
     return helpers.AttrValueSetFloat64(&o.{{ property_case $key $.Config }}, data)
@@ -82,7 +87,6 @@ func (o *{{ $.Name | lowerCamelCase }}TerraformModel) set{{ $key | setPropertyCa
 {{- end }}
 }
 {{- end }}
-{{- end }}
 {{ end }}
 
 func (o *{{ .Name | lowerCamelCase }}TerraformModel) updateFromApiData(data map[string]any) (diags diag.Diagnostics, err error) {
@@ -91,12 +95,17 @@ func (o *{{ .Name | lowerCamelCase }}TerraformModel) updateFromApiData(data map[
     }
 {{- range $key := .PropertyGetKeys }}
 {{- with (index $.PropertyGetData $key) }}
-    {{- if not (and (eq (lowerCase $.Name) "tokens") (eq (lowerCase $key) "token")) }}
+    {{- if and (eq (lowerCase $.Name) "tokens") (eq (lowerCase $key) "token") }}
+    // For the token field in the Tokens model, only update if it's not already set
+    if o.{{ property_case $key $.Config }}.IsNull() || o.{{ property_case $key $.Config }}.IsUnknown() {
+        if dg, _ := o.set{{ $key | setPropertyCase }}(data["{{ $key }}"]); dg.HasError() {
+            diags.Append(dg...)
+        }
+    }
+    {{- else }}
     if dg, _ := o.set{{ $key | setPropertyCase }}(data["{{ $key }}"]); dg.HasError() {
         diags.Append(dg...)
     }
-    {{- else }}
-    // Tokens setToken is excluded since the api returns stars and terraform always detects change
     {{- end }}
 {{- end }}
 {{- end }}

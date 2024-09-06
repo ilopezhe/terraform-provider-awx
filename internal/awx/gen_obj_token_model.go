@@ -75,6 +75,14 @@ func (o *tokensTerraformModel) setScope(data any) (d diag.Diagnostics, err error
 	return helpers.AttrValueSetString(&o.Scope, data, false)
 }
 
+func (o *tokensTerraformModel) setToken(data any) (d diag.Diagnostics, err error) {
+	// For the token field in the Tokens model, only set if it's not already set
+	if o.Token.IsNull() || o.Token.IsUnknown() {
+		return helpers.AttrValueSetString(&o.Token, data, false)
+	}
+	return // Return without changing the value if it's already set
+}
+
 func (o *tokensTerraformModel) setUser(data any) (d diag.Diagnostics, err error) {
 	return helpers.AttrValueSetInt64(&o.User, data)
 }
@@ -101,7 +109,12 @@ func (o *tokensTerraformModel) updateFromApiData(data map[string]any) (diags dia
 	if dg, _ := o.setScope(data["scope"]); dg.HasError() {
 		diags.Append(dg...)
 	}
-	// Tokens setToken is excluded since the api returns stars and terraform always detects change
+	// For the token field in the Tokens model, only update if it's not already set
+	if o.Token.IsNull() || o.Token.IsUnknown() {
+		if dg, _ := o.setToken(data["token"]); dg.HasError() {
+			diags.Append(dg...)
+		}
+	}
 	if dg, _ := o.setUser(data["user"]); dg.HasError() {
 		diags.Append(dg...)
 	}
