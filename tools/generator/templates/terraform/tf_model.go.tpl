@@ -89,9 +89,13 @@ func (o *{{ .Name | lowerCamelCase }}TerraformModel) updateFromApiData(data map[
     }
 {{- range $key := .PropertyGetKeys }}
 {{- with (index $.PropertyGetData $key) }}
+    {{- if not (and (eq (lowerCase $.Name) "tokens") (eq (lowerCase $key) "token")) }}
     if dg, _ := o.set{{ $key | setPropertyCase }}(data["{{ $key }}"]); dg.HasError() {
         diags.Append(dg...)
     }
+    {{- else }}
+    // Tokens setToken is excluded since the api returns stars and terraform always detects change
+    {{- end }}
 {{- end }}
 {{- end }}
     return diags, nil

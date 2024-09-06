@@ -105,9 +105,7 @@ func (o *tokensTerraformModel) updateFromApiData(data map[string]any) (diags dia
 	if dg, _ := o.setScope(data["scope"]); dg.HasError() {
 		diags.Append(dg...)
 	}
-	if dg, _ := o.setToken(data["token"]); dg.HasError() {
-		diags.Append(dg...)
-	}
+	// Tokens setToken is excluded since the api returns stars and terraform always detects change
 	if dg, _ := o.setUser(data["user"]); dg.HasError() {
 		diags.Append(dg...)
 	}
