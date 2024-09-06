@@ -75,10 +75,6 @@ func (o *tokensTerraformModel) setScope(data any) (d diag.Diagnostics, err error
 	return helpers.AttrValueSetString(&o.Scope, data, false)
 }
 
-func (o *tokensTerraformModel) setToken(data any) (d diag.Diagnostics, err error) {
-	return helpers.AttrValueSetString(&o.Token, data, false)
-}
-
 func (o *tokensTerraformModel) setUser(data any) (d diag.Diagnostics, err error) {
 	return helpers.AttrValueSetInt64(&o.User, data)
 }

@@ -63,6 +63,7 @@ func (o *{{ .Name | lowerCamelCase }}TerraformModel) BodyRequest() (req {{ .Name
 
 {{ range $key := .PropertyGetKeys }}
 {{- with (index $.PropertyGetData $key) }}
+{{- if not (and (eq (lowerCase $.Name) "tokens") (eq (lowerCase $key) "token")) }}
 func (o *{{ $.Name | lowerCamelCase }}TerraformModel) set{{ $key | setPropertyCase }}(data any) (d diag.Diagnostics, err error) {
 {{- if eq (awx2go_value .) "types.Int64Value" }}
     return helpers.AttrValueSetInt64(&o.{{ property_case $key $.Config }}, data)
@@ -80,6 +81,7 @@ func (o *{{ $.Name | lowerCamelCase }}TerraformModel) set{{ $key | setPropertyCa
     return helpers.AttrValueSetString(&o.{{ property_case $key $.Config }}, data, {{ default .trim false }})
 {{- end }}
 }
+{{- end }}
 {{- end }}
 {{ end }}
 
